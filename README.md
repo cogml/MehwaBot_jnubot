@@ -2,11 +2,11 @@
 
 ## 전남대학교 챗봇 매화봇 제작
 
-##### mehwa_bot
+### mehwa_bot
 
 제작자 : 전남대학교 송정경, 이채희, 허수영
 
-##### <Android Studio>
+### Android Studio
 
 Android Gradle Plugin Version : 3.6.1
 
