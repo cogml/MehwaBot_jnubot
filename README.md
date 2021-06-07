@@ -12,6 +12,6 @@ Android Gradle Plugin Version : 3.6.1
 
 Gradle Version : 5.6.4
 
-챗봇 사용 화면
+### 챗봇 사용 화면
 
 ![chatbot](https://user-images.githubusercontent.com/55068106/120958206-2da6f080-c792-11eb-91dc-0eebe2c53120.jpg)
