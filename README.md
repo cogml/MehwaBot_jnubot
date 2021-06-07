@@ -5,4 +5,4 @@
 챗봇 이름 : 매화봇
 
 챗봇 사용 화면
-![챗봇화면](https://user-images.githubusercontent.com/55068106/120957950-a0fc3280-c791-11eb-9cb3-42c334001085.jpg)
+![chatbot](https://user-images.githubusercontent.com/55068106/120958206-2da6f080-c792-11eb-91dc-0eebe2c53120.jpg)
