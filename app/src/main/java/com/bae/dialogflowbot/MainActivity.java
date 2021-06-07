@@ -1,14 +1,11 @@
 package com.bae.dialogflowbot;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.service.autofill.TextValueSanitizer;
 import android.speech.RecognizerIntent;
-import android.speech.tts.TextToSpeech;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,6 +21,9 @@ import com.bae.dialogflowbot.adapters.ChatAdapter;
 import com.bae.dialogflowbot.helpers.SendMessageInBg;
 import com.bae.dialogflowbot.interfaces.BotReply;
 import com.bae.dialogflowbot.models.Message;
+import com.bae.dialogflowbot.models.calendar_activity;
+import com.bae.dialogflowbot.models.map_activity;
+import com.bae.dialogflowbot.models.menu_activity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.api.gax.core.FixedCredentialsProvider;
@@ -39,23 +40,34 @@ import com.google.common.collect.Lists;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity implements BotReply {
-
   RecyclerView chatView;
   ChatAdapter chatAdapter;
   List<Message> messageList = new ArrayList<>();
   EditText editMessage;
   ImageButton btnSend;
+  FloatingActionButton info;
 
   //dialogFlow
   private SessionsClient sessionsClient;
   private SessionName sessionName;
   private String uuid = UUID.randomUUID().toString();
   private String TAG = "mainactivity";
+
+  //화면전환
+  //지도 버튼 클릭시 화면전환 (채희)
+  private Button button5;
+
+  //캘린더 버튼 클릭시 화면전환 (수영)
+  private Button button2;
+
+
+  //메뉴 버튼 클릭시 화면전환 (정경)
+  private Button button6;
+  private Button say;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -65,14 +77,87 @@ public class MainActivity extends AppCompatActivity implements BotReply {
     editMessage = findViewById(R.id.editMessage);
     btnSend = findViewById(R.id.btnSend);
 
+
+    //화면전환
+    //캘린더 버튼 클릭시 화면전환 (수영)
+    button2 = findViewById(R.id.button2);
+    button2.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Intent intent = new Intent(MainActivity.this, calendar_activity.class);
+        startActivity(intent); //액티비티 이동
+      }
+    });
+
+    //지도 버튼 클릭시 화면전환(채희)
+    button5 = findViewById(R.id.button5);
+    button5.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Intent intent = new Intent(MainActivity.this, map_activity.class);
+        startActivity(intent); //액티비티 이동
+      }
+    });
+
+    //메뉴 버튼 클릭 화면전환 (정경)
+    button6 = findViewById(R.id.button6);
+    button6.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+          Intent intent = new Intent(MainActivity.this, menu_activity.class);
+          startActivity(intent); //액티비티 이동
+      }
+    });
+
     chatAdapter = new ChatAdapter(messageList, this);
     chatView.setAdapter(chatAdapter);
+
+    info= (FloatingActionButton)findViewById(R.id.info);
+    info.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        AlertDialog.Builder ad = new AlertDialog.Builder(MainActivity.this);
+        ad.setIcon(R.mipmap.ic_launcher_maehwa_round);
+        ad.setTitle("매화봇에게 물어보세요!");
+        ad.setMessage("'오늘의 운세'\n" +
+                "'오늘의 명언'\n" +
+                "학사일정\n" +
+                "학과별 전화번호\n" +
+                "학과별 홈페이지 주소\n" +
+                "장학금 정보\n" +
+                "동아리 정보\n" +
+                "제휴업체 정보\n" +
+                "수강신청 방법\n" +
+                "증명서 발급 방법\n" +
+                "등록금 고지서 발급\n" +
+                "와이파이 사용 방법\n" +
+                "기숙사 관련 정보\n" +
+                "도서관 운영시간\n" +
+                "도서관 대출기간\n" +
+                "스포츠센터 이용 정보\n" +
+                "교내 주차요금\n" +
+                "광주-여수 캠퍼스 셔틀버스\n" +
+                "통학 셔틀 버스 노선\n" +
+                "편의시설 위치\n" +
+                "(복사기, 여학우쉼터, 자판기, 무인카페, ATM)\n" +
+                "시내버스 정류장, 정류장별 버스 정보\n" +
+                "\n" +
+                "전남대학교에 대해 궁금한것을 물어보세요!");
+        ad.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            dialog.dismiss();
+          }
+        });
+        ad.show();
+      }
+    });
 
     FloatingActionButton speak = findViewById(R.id.speak);
     speak.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+        Snackbar.make(view, "음성인식", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
 
         VoiceTask voiceTask = new VoiceTask();
@@ -99,6 +184,13 @@ public class MainActivity extends AppCompatActivity implements BotReply {
     setUpBot();
   }
 
+  public void mSetLineWidth(int i) {
+  }
+
+  public void mSetLineColor(int color) {
+  }
+
+
   public class VoiceTask extends AsyncTask<String, Integer, String> {
     String str = null;
 
@@ -122,6 +214,7 @@ public class MainActivity extends AppCompatActivity implements BotReply {
       }
     }
   }
+
 
   private void getVoice() {
 
