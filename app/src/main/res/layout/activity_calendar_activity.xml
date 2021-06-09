@@ -96,6 +96,7 @@
         android:layout_marginEnd="8dp"
         android:text="삭제"
         android:visibility="invisible"
+        android:textColor="#7A7A7A"
         app:layout_constraintBaseline_toBaselineOf="@+id/cha_Btn"
         app:layout_constraintEnd_toEndOf="@+id/save_Btn"></Button>
 
@@ -106,6 +107,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:text="저장"
+        android:textColor="#7A7A7A"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -121,6 +123,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:text="수정"
+        android:textColor="#7A7A7A"
         android:visibility="invisible"
         app:layout_constraintBaseline_toBaselineOf="@+id/save_Btn"
         app:layout_constraintEnd_toStartOf="@+id/del_Btn"
